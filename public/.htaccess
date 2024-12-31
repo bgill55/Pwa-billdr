@@ -1,0 +1,39 @@
+# Enable rewrite engine
+RewriteEngine On
+
+# Handle requests for the service worker
+<Files "sw.js">
+    Header set Service-Worker-Allowed "/"
+    Header set Cache-Control "no-cache"
+</Files>
+
+# Set correct MIME types
+AddType application/json .json
+AddType application/manifest+json .webmanifest
+AddType image/png .png
+
+# Handle PWA routes for SPA
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [QSA,L]
+
+# Set security headers
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "SAMEORIGIN"
+Header set X-XSS-Protection "1; mode=block"
+
+# Enable CORS for PWA resources
+<FilesMatch "\.(json|webmanifest|js|png)$">
+    Header set Access-Control-Allow-Origin "*"
+</FilesMatch>
+
+# Properly handle JSON manifest
+<Files "manifest.json">
+    Header set Content-Type "application/manifest+json"
+    Header set Cache-Control "no-cache"
+</Files>
+
+# Handle other static assets
+<FilesMatch ".(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+    Header set Cache-Control "max-age=31536000, public"
+</FilesMatch>
