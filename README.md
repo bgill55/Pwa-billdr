@@ -135,4 +135,4 @@ For support, please open an issue in the GitHub repository or contact the mainta
 
 ---
 
-Made with ❤️ by [Your Name/Organization]
+Made with ❤️ by @bgill55_art
