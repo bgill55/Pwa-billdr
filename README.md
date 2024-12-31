@@ -14,8 +14,8 @@ A modern Progressive Web App (PWA) converter and toolkit that helps developers t
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
-cd pwa-converter
+git clone https://github.com/bgill55/Pwa-billdr.git
+cd Pwa-billdr
 ```
 
 2. Install dependencies:
