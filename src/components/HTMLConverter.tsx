@@ -65,8 +65,8 @@ const HTMLConverter = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-      <h2 className="text-xl font-semibold mb-4 dark:text-white">HTML Converter</h2>
+    <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 sm:p-6">
+      <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 dark:text-white">HTML Converter</h2>
       
       <div className="mb-4">
         <label htmlFor="html-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -76,19 +76,19 @@ const HTMLConverter = () => {
           id="html-input"
           value={inputHtml}
           onChange={(e) => setInputHtml(e.target.value)}
-          className="w-full h-48 p-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
+          className="w-full h-32 sm:h-48 p-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md font-mono text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white"
           placeholder="Enter your HTML code..."
         />
       </div>
 
       {inputHtml && (
         <>
-          <div className="mt-6">
+          <div className="mt-4 sm:mt-6">
             <div className="flex items-center justify-between mb-2">
-              <h3 className="text-lg font-medium dark:text-white">Converted PWA-ready Code</h3>
+              <h3 className="text-base sm:text-lg font-medium dark:text-white">Converted PWA-ready Code</h3>
               <button
                 onClick={handleCopy}
-                className="flex items-center gap-2 px-3 py-1 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
               >
                 {copied ? (
                   <CheckCheck className="w-4 h-4 text-green-500" />
@@ -105,37 +105,15 @@ const HTMLConverter = () => {
                 style={atomOneDark}
                 customStyle={{
                   backgroundColor: 'rgb(31 41 55)',
-                  padding: '1rem',
+                  padding: '0.75rem',
                   borderRadius: '0.5rem',
-                  fontSize: '0.875rem'
+                  fontSize: '0.75rem',
+                  lineHeight: '1.25rem',
                 }}
-                className="dark:bg-gray-800"
+                className="max-h-[400px] overflow-y-auto"
               >
                 {convertedHtml}
               </SyntaxHighlighter>
-            </div>
-          </div>
-
-          <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
-            <h4 className="text-lg font-medium mb-3 text-blue-800 dark:text-blue-300">
-              Required Icon Structure
-            </h4>
-            <div className="text-sm text-blue-700 dark:text-blue-300 space-y-2">
-              <p>Your project needs these critical icons in the public folder:</p>
-              <pre className="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-md overflow-x-auto">
-{`public/
-├── assets/
-│   ├── icons/
-│   │   ├── icon_512.png  (512x512, purpose: any)
-│   │   └── icon_192.png  (192x192, purpose: maskable)
-│   ├── android/
-│   │   ├── android-launchericon-512-512.png
-│   │   ├── android-launchericon-192-192.png
-│   │   └── ... (other sizes)
-│   └── ios/
-│       ├── 180.png
-│       ├── 152.png
-│       └── ... (other sizes)`}</pre>
             </div>
           </div>
         </>
