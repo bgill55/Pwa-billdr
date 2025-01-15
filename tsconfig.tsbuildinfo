@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/components/DeploymentGuide.tsx","./src/components/HTMLConverter.tsx","./src/components/ManifestBuilder.tsx","./src/components/PWAInstallPrompt.tsx","./src/components/Settings.tsx","./src/components/ThemeProvider.tsx"],"version":"5.7.2"}
