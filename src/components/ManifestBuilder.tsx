@@ -149,9 +149,9 @@ const ManifestBuilder = () => {
 
   return (
     <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-3 sm:p-6">
-      <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 dark:text-white">Manifest Builder</h2>
+      <h2 className="text-base sm:text-xl font-semibold mb-3 sm:mb-4 dark:text-white">Manifest Builder</h2>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -361,9 +361,9 @@ const ManifestBuilder = () => {
           </div>
         </div>
 
-        <div>
+        <div className="lg:pl-4">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-base sm:text-lg font-medium dark:text-white">Generated Manifest</h3>
+            <h3 className="text-base font-medium dark:text-white">Generated Manifest</h3>
             <div className="flex gap-2">
               <button
                 onClick={handleCopy}
