@@ -1,8 +1,8 @@
 # PWA Converter App
 
-<img>![Static Badge](https://img.shields.io/badge/Made_with_%E2%99%A5%EF%B8%8F-%26_Srcbook-48a3c5?style=plastic&labelColor=111112&color=48a3c5&cacheSeconds=3600&link=Srcbook.com)</img>
+![Static Badge](https://img.shields.io/badge/Made_with_%E2%99%A5%EF%B8%8F-%26_Srcbook-48a3c5?style=plastic&labelColor=111112&color=48a3c5&cacheSeconds=3600&link=Srcbook.com)
 
-![GitHub Date created](https://img.shields.io/github/created-at/bgill55/Pwa-billdr?style=plastic&labelColor=111112&color=48a3c5&cacheSeconds=3600&link=Srcbook.com&link=https%3A%2F%2Fpwa-billdr-gv2nhvage-bgill55-arts-projects.vercel.app%2F)
+![GitHub Date created](https://img.shields.io/github/created-at/bgill55/Pwa-billdr?style=plastic&labelColor=111112&color=48a3c5&cacheSeconds=3600&link=Srcbook.com&link=https://pwa-billdr-gv2nhvage-bgill55-arts-projects.vercel.app%2F)
 
 
 
