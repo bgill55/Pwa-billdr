@@ -1,6 +1,6 @@
 # PWA Converter App
 
-![Static Badge](https://img.shields.io/badge/Made_with_%E2%99%A5%EF%B8%8F-%26_Srcbook-48a3c5?style=plastic&labelColor=111112&color=48a3c5&cacheSeconds=3600&link=Srcbook.com)
+<img>![Static Badge](https://img.shields.io/badge/Made_with_%E2%99%A5%EF%B8%8F-%26_Srcbook-48a3c5?style=plastic&labelColor=111112&color=48a3c5&cacheSeconds=3600&link=Srcbook.com)</img>
 
 
 A modern Progressive Web App (PWA) converter and toolkit that helps developers transform their web applications into installable PWAs with ease.
