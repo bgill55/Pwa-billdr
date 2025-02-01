@@ -47,8 +47,8 @@ function App() {
           </p>
           <div className="flex justify-center">
             <img
-              src="https://img.shields.io/badge/Made_with_%E2%99%A5%EF%B8%8F-%26_Srcbook-purple?style=plastic&labelColor=11112&color=purple&cacheSeconds=3600&link=https%3A%2F%2Fsrcbook.com"
-              alt="Made with ♥️ & Srcbook"
+              src="https://img.shields.io/badge/Made_with_%E2%99%A5%EF%B8%8F-%26_Srcbook-purple?style=plastic&labelColor=11112&color=purple&cacheSeconds=3600&link=https%3A%2F%2Finstagram.com/bgill55_art"
+              alt="Made with ♥️ bgill55_art"
               className="hover:opacity-90 transition-opacity"
             />
           </div>
