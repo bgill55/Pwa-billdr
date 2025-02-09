@@ -1,7 +1,6 @@
 npm install
 npm install --save-dev eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-plugin-react globals
 cat > eslint.config.js << 'EOF'
-import js from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import reactPlugin from 'eslint-plugin-react';
@@ -30,11 +29,14 @@ export default [
       }
     },
     rules: {
-      'no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': ['error', {
+        'argsIgnorePattern': '^_',
+        'varsIgnorePattern': '^_',
+        'caughtErrorsIgnorePattern': '^_|^error$'
+      }],
       'no-undef': 'error',
       'react/react-in-jsx-scope': 'off',
-      'no-console': 'off',
-      ...tseslint.configs.recommended.rules
+      'no-console': 'off'
     },
     settings: {
       react: {
