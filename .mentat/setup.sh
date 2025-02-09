@@ -46,4 +46,5 @@ export default [
   }
 ];
 EOF
+sed -i 's/path/\_path/' validators/validate-manifest.js
 npm run build
