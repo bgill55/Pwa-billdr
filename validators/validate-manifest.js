@@ -1,11 +1,11 @@
 import { validateManifest } from '@pwabuilder/manifest-validation';
 import fs from 'fs';
-import path from 'path';
+import _path from 'path';
 
 async function validate() {
   try {
     // Path to your local manifest file
-    const manifestPath = ('./dist/manifest.json'); // Adjust the path as necessary
+    const manifestPath = ('./dist/manifest.json'); // Adjust the _path as necessary
 
     // Read the manifest file
     const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
