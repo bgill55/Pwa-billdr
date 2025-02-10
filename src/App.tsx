@@ -3,6 +3,7 @@ import PWAInstallPrompt from './components/PWAInstallPrompt'
 import DeploymentGuide from './components/DeploymentGuide'
 import HTMLConverter from './components/HTMLConverter'
 import ManifestBuilder from './components/ManifestBuilder'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
         </div>
       </footer>
     </div>
+  <SpeedInsights />
   )
 }
 
