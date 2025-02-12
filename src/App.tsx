@@ -1,4 +1,4 @@
-importimport PWAInstallPrompt from './components/PWAInstallPrompt'
+import PWAInstallPrompt from './components/PWAInstallPrompt'
 import DeploymentGuide from './components/DeploymentGuide'
 import HTMLConverter from './components/HTMLConverter'
 import ManifestBuilder from './components/ManifestBuilder'
