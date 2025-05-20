@@ -2,7 +2,7 @@ import PWAInstallPrompt from './components/PWAInstallPrompt'
 import DeploymentGuide from './components/DeploymentGuide'
 import HTMLConverter from './components/HTMLConverter'
 import ManifestBuilder from './components/ManifestBuilder'
-import { SpeedInsights } from "@vercel/speed-insights/next"
+
 function RootLayout({
   children,
 }: {
@@ -58,7 +58,7 @@ function App() {
             </p>
             <div className="flex justify-center">
               <img
-                src="https://img.shields.io/badge/Made_with_%E2%99%A5%EF%B8%8F-%26_Srcbook-purple?style=plastic&labelColor=11112&color=purple&cacheSeconds=3600&link=https%3A%2F%2Finstagram.com%2Fbgill55_art"
+                src="https://img.shields.io/badge/Made_with_%E2%99%A5%EF%B8%8F-bgill55_art-crimson?style=plastic&labelColor=11112&color=purple&cacheSeconds=3600&link=https%3A%2F%2Finstagram.com%2Fbgill55_art"
                 alt="Made with ♥️ bgill55_art"
                 className="hover:opacity-90 transition-opacity"
               />
