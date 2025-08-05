@@ -6,11 +6,12 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
 }
 
-// Updated paths to match the standardized structure
-const REQUIRED_ICONS = [
-  { path: '/assets/icons/icon_512.png', size: '512x512', purpose: 'any' },
-  { path: '/assets/icons/icon_192.png', size: '192x192', purpose: 'maskable' }
-];
+interface ManifestIcon {
+  src: string;
+  sizes: string;
+  type: string;
+  purpose?: string;
+}
 
 const PWAInstallPrompt = () => {
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
@@ -18,20 +19,47 @@ const PWAInstallPrompt = () => {
   const [iconErrors, setIconErrors] = useState<string[]>([]);
 
   useEffect(() => {
-    // Check if critical icons are properly loaded
+    const getAllIconPaths = async (): Promise<string[]> => {
+      const iconPaths: Set<string> = new Set();
+
+      // Icons from index.html (hardcoded for now, as direct DOM parsing is not feasible in this context)
+      iconPaths.add('/assets/icons/icon_192.png');
+      iconPaths.add('/assets/icons/icon_512.png');
+      iconPaths.add('/assets/ios/180.png');
+      iconPaths.add('/assets/ios/152.png');
+      iconPaths.add('/assets/ios/120.png');
+
+      // Icons from manifest.webmanifest
+      try {
+        const response = await fetch('/manifest.webmanifest');
+        if (response.ok) {
+          const manifest = await response.json();
+          if (manifest.icons && Array.isArray(manifest.icons)) {
+            manifest.icons.forEach((icon: ManifestIcon) => {
+              iconPaths.add(icon.src);
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching or parsing manifest:', error);
+      }
+
+      return Array.from(iconPaths);
+    };
+
     const checkIcons = async () => {
       try {
         const errors: string[] = [];
-        
-        // Check required icons first
-        for (const icon of REQUIRED_ICONS) {
+        const allIconPaths = await getAllIconPaths();
+
+        for (const path of allIconPaths) {
           try {
-            const response = await fetch(icon.path);
+            const response = await fetch(path);
             if (!response.ok) {
-              errors.push(`${icon.size} ${icon.purpose} icon missing (${icon.path})`);
+              errors.push(`Icon missing or inaccessible: ${path}`);
             }
           } catch {
-            errors.push(`${icon.size} ${icon.purpose} icon missing (${icon.path})`);
+            errors.push(`Icon missing or inaccessible: ${path}`);
           }
         }
 
@@ -50,7 +78,7 @@ const PWAInstallPrompt = () => {
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    
+
     // Check if already installed
     if (window.matchMedia('(display-mode: standalone)').matches) {
       setIsInstalled(true);
@@ -66,7 +94,7 @@ const PWAInstallPrompt = () => {
 
     await installPrompt.prompt();
     const result = await installPrompt.userChoice;
-    
+
     if (result.outcome === 'accepted') {
       setIsInstalled(true);
       setInstallPrompt(null);
@@ -78,9 +106,9 @@ const PWAInstallPrompt = () => {
       <div className="text-yellow-600 flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/30 px-4 py-3 rounded-lg">
         <AlertTriangle className="w-5 h-5 flex-shrink-0" />
         <div className="flex flex-col">
-          <span className="font-medium">Critical Icons Missing</span>
+          <span className="font-medium">PWA Icons Missing or Inaccessible</span>
           <span className="text-sm">
-            Please ensure these required icons exist:
+            Please ensure all PWA icons exist and are accessible:
             <ul className="list-disc list-inside mt-1 space-y-1">
               {iconErrors.map((error, index) => (
                 <li key={index}>{error}</li>

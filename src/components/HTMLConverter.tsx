@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Copy, CheckCheck } from 'lucide-react';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { Highlight, themes } from 'prism-react-renderer';
 
 const HTMLConverter = () => {
   const [inputHtml, setInputHtml] = useState('');
@@ -15,7 +14,7 @@ const HTMLConverter = () => {
     ${inputHtml.includes('<title>') ? '' : '<title>My PWA App</title>'}
     
     <!-- PWA Meta Tags -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#000000"/>
     <meta name="description" content="A Progressive Web Application"/>
     
@@ -105,20 +104,23 @@ const HTMLConverter = () => {
               </div>
               
               <div className="relative">
-                <SyntaxHighlighter
+                <Highlight
+                  theme={themes.dracula}
+                  code={convertedHtml}
                   language="html"
-                  style={atomOneDark}
-                  customStyle={{
-                    backgroundColor: 'rgb(31 41 55)',
-                    padding: '0.75rem',
-                    borderRadius: '0.5rem',
-                    fontSize: '0.75rem',
-                    lineHeight: '1.25rem',
-                  }}
-                  className="max-h-[400px] overflow-y-auto"
                 >
-                  {convertedHtml}
-                </SyntaxHighlighter>
+                  {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                    <pre className={`${className} max-h-[400px] overflow-y-auto rounded-md text-sm leading-tight`} style={{ ...style, backgroundColor: 'rgb(31 41 55)', padding: '0.75rem' }}>
+                      {tokens.map((line, i) => (
+                        <div {...getLineProps({ line, key: i })}>
+                          {line.map((token, key) => (
+                            <span {...getTokenProps({ token, key })} />
+                          ))}
+                        </div>
+                      ))}
+                    </pre>
+                  )}
+                </Highlight>
               </div>
             </div>
           )}

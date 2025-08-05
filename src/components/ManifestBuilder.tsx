@@ -1,12 +1,25 @@
 import { useState } from 'react';
 import { Copy, Download, CheckCheck } from 'lucide-react';
-import SyntaxHighlighter from 'react-syntax-highlighter';
-import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { Highlight, themes } from 'prism-react-renderer';
 
 interface RelatedApplication {
   platform: string;
   url: string;
   id: string;
+}
+
+interface ShortcutItem {
+  name: string;
+  short_name?: string;
+  description?: string;
+  url: string;
+  icons?: { src: string; sizes: string; type: string; }[];
+}
+
+interface ScreenshotItem {
+  src: string;
+  sizes: string;
+  type: string;
 }
 
 interface ManifestData {
@@ -26,6 +39,8 @@ interface ManifestData {
   handle_links: 'auto' | 'preferred' | 'not-preferred';
   preferred_related_applications: boolean;
   related_applications: RelatedApplication[];
+  shortcuts?: ShortcutItem[];
+  screenshots?: ScreenshotItem[];
 }
 
 const DEFAULT_MANIFEST: ManifestData = {
@@ -44,7 +59,9 @@ const DEFAULT_MANIFEST: ManifestData = {
   lang: 'en',
   handle_links: 'auto',
   preferred_related_applications: false,
-  related_applications: []
+  related_applications: [],
+  shortcuts: [],
+  screenshots: []
 };
 
 const LANGUAGES = [
@@ -71,6 +88,17 @@ const ManifestBuilder = () => {
     url: '',
     id: ''
   });
+  const [showShortcut, setShowShortcut] = useState(false);
+  const [newShortcut, setNewShortcut] = useState<ShortcutItem>({
+    name: '',
+    url: '',
+  });
+  const [showScreenshot, setShowScreenshot] = useState(false);
+  const [newScreenshot, setNewScreenshot] = useState<ScreenshotItem>({
+    src: '',
+    sizes: '',
+    type: 'image/png',
+  });
 
   const addRelatedApp = () => {
     if (newApp.url && newApp.id) {
@@ -92,6 +120,46 @@ const ManifestBuilder = () => {
     });
   };
 
+  const addShortcut = () => {
+    if (newShortcut.name && newShortcut.url) {
+      setManifestData({
+        ...manifestData,
+        shortcuts: [...manifestData.shortcuts || [], { ...newShortcut }]
+      });
+      setNewShortcut({ name: '', url: '' });
+      setShowShortcut(false);
+    }
+  };
+
+  const removeShortcut = (index: number) => {
+    const newShortcuts = [...manifestData.shortcuts || []];
+    newShortcuts.splice(index, 1);
+    setManifestData({
+      ...manifestData,
+      shortcuts: newShortcuts
+    });
+  };
+
+  const addScreenshot = () => {
+    if (newScreenshot.src && newScreenshot.sizes && newScreenshot.type) {
+      setManifestData({
+        ...manifestData,
+        screenshots: [...manifestData.screenshots || [], { ...newScreenshot }]
+      });
+      setNewScreenshot({ src: '', sizes: '', type: 'image/png' });
+      setShowScreenshot(false);
+    }
+  };
+
+  const removeScreenshot = (index: number) => {
+    const newScreenshots = [...manifestData.screenshots || []];
+    newScreenshots.splice(index, 1);
+    setManifestData({
+      ...manifestData,
+      screenshots: newScreenshots
+    });
+  };
+
   const generateManifest = () => {
     const manifest = {
       name: manifestData.name,
@@ -110,6 +178,8 @@ const ManifestBuilder = () => {
       handle_links: manifestData.handle_links,
       preferred_related_applications: manifestData.preferred_related_applications,
       related_applications: manifestData.related_applications.length > 0 ? manifestData.related_applications : undefined,
+      shortcuts: manifestData.shortcuts && manifestData.shortcuts.length > 0 ? manifestData.shortcuts : undefined,
+      screenshots: manifestData.screenshots && manifestData.screenshots.length > 0 ? manifestData.screenshots : undefined,
       icons: [
         {
           src: '/assets/icons/icon_512.png',
@@ -140,7 +210,7 @@ const ManifestBuilder = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'manifest.json';
+    a.download = 'manifest.webmanifest';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -359,6 +429,160 @@ const ManifestBuilder = () => {
               </button>
             )}
           </div>
+
+          <div className="space-y-4 border-t dark:border-gray-700 pt-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Shortcuts
+              </label>
+            </div>
+
+            {manifestData.shortcuts?.map((shortcut, index) => (
+              <div key={index} className="flex items-center gap-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded-md">
+                <span className="text-sm text-gray-600 dark:text-gray-300">{shortcut.name}</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400 truncate flex-1">{shortcut.url}</span>
+                <button
+                  onClick={() => removeShortcut(index)}
+                  className="text-red-500 hover:text-red-600 text-sm px-2 py-1"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+
+            {showShortcut ? (
+              <div className="space-y-2 bg-gray-50 dark:bg-gray-700/50 p-3 rounded-md">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    value={newShortcut.name}
+                    onChange={(e) => setNewShortcut({ ...newShortcut, name: e.target.value })}
+                    placeholder="Shortcut Name"
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    URL
+                  </label>
+                  <input
+                    type="text"
+                    value={newShortcut.url}
+                    onChange={(e) => setNewShortcut({ ...newShortcut, url: e.target.value })}
+                    placeholder="/today"
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white text-sm"
+                  />
+                </div>
+                <div className="flex justify-end gap-2">
+                  <button
+                    onClick={() => setShowShortcut(false)}
+                    className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={addShortcut}
+                    className="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowShortcut(true)}
+                className="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+              >
+                + Add Shortcut
+              </button>
+            )}
+          </div>
+
+          <div className="space-y-4 border-t dark:border-gray-700 pt-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                Screenshots
+              </label>
+            </div>
+
+            {manifestData.screenshots?.map((screenshot, index) => (
+              <div key={index} className="flex items-center gap-2 bg-gray-50 dark:bg-gray-700/50 p-2 rounded-md">
+                <span className="text-sm text-gray-600 dark:text-gray-300">{screenshot.src}</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400 truncate flex-1">{screenshot.sizes}</span>
+                <button
+                  onClick={() => removeScreenshot(index)}
+                  className="text-red-500 hover:text-red-600 text-sm px-2 py-1"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+
+            {showScreenshot ? (
+              <div className="space-y-2 bg-gray-50 dark:bg-gray-700/50 p-3 rounded-md">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Source URL
+                  </label>
+                  <input
+                    type="text"
+                    value={newScreenshot.src}
+                    onChange={(e) => setNewScreenshot({ ...newScreenshot, src: e.target.value })}
+                    placeholder="/screenshots/screenshot1.png"
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Sizes (e.g., 1280x720)
+                  </label>
+                  <input
+                    type="text"
+                    value={newScreenshot.sizes}
+                    onChange={(e) => setNewScreenshot({ ...newScreenshot, sizes: e.target.value })}
+                    placeholder="1280x720"
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Type (e.g., image/png)
+                  </label>
+                  <input
+                    type="text"
+                    value={newScreenshot.type}
+                    onChange={(e) => setNewScreenshot({ ...newScreenshot, type: e.target.value })}
+                    placeholder="image/png"
+                    className="w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-white text-sm"
+                  />
+                </div>
+                <div className="flex justify-end gap-2">
+                  <button
+                    onClick={() => setShowScreenshot(false)}
+                    className="px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={addScreenshot}
+                    className="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Add
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowScreenshot(true)}
+                className="text-sm text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+              >
+                + Add Screenshot
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="lg:pl-4">
@@ -387,20 +611,23 @@ const ManifestBuilder = () => {
           </div>
           
           <div className="relative">
-            <SyntaxHighlighter
+            <Highlight
+              theme={themes.dracula}
+              code={generateManifest()}
               language="json"
-              style={atomOneDark}
-              customStyle={{
-                backgroundColor: 'rgb(31 41 55)',
-                padding: '0.75rem',
-                borderRadius: '0.5rem',
-                fontSize: '0.75rem',
-                lineHeight: '1.25rem',
-              }}
-              className="h-[400px] overflow-y-auto"
             >
-              {generateManifest()}
-            </SyntaxHighlighter>
+              {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                <pre className={`${className} h-[400px] overflow-y-auto rounded-md text-sm leading-tight`} style={{ ...style, backgroundColor: 'rgb(31 41 55)', padding: '0.75rem' }}>
+                  {tokens.map((line, i) => (
+                    <div {...getLineProps({ line, key: i })}>
+                      {line.map((token, key) => (
+                        <span {...getTokenProps({ token, key })} />
+                      ))}
+                    </div>
+                  ))}
+                </pre>
+              )}
+            </Highlight>
           </div>
         </div>
       </div>

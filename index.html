@@ -6,7 +6,7 @@
     <title>My PWA App</title>
     
     <!-- PWA Meta Tags -->
-    <link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.webmanifest">
     <meta name="theme-color" content="#000000"/>
     <meta name="description" content="A Progressive Web Application"/>
     
@@ -24,18 +24,6 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-              console.log('ServiceWorker registration successful');
-            })
-            .catch(err => {
-              console.log('ServiceWorker registration failed: ', err);
-            });
-        });
-      }
-    </script>
+    
   </body>
 </html>
